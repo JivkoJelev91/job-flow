@@ -1,4 +1,4 @@
-# JobFlow
+# Job Flow
 
 A personal job application tracking dashboard. Keep track of every job application in one place: company, position, status, salary, interviews, notes, and next steps.
 
