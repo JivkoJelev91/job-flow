@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ApplicationStatus {
+  NOT_APPLIED
+  SAVED
+  APPLIED
+  SCREENING
+  INTERVIEW
+  OFFER
+  REJECTED
+  WITHDRAWN
+  GHOSTED
+  CLOSED
+
+  @@map("application_status")
+}
+
+enum WorkMode {
+  REMOTE
+  HYBRID
+  OFFICE
+  UNKNOWN
+
+  @@map("work_mode")
+}
+
+enum EmploymentType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  FREELANCE
+  INTERNSHIP
+  UNKNOWN
+
+  @@map("employment_type")
+}
+
+enum InterviewType {
+  PHONE
+  VIDEO
+  ONSITE
+  TECHNICAL
+  HR
+  OTHER
+
+  @@map("interview_type")
+}
+
+model Company {
+  id           String        @id @default(cuid())
+  name         String
+  website      String?
+  industry     String?
+  notes        String?
+  applications Application[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("companies")
+}
+
+model Application {
+  id              String            @id @default(cuid())
+  companyId       String
+  company         Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  position        String
+  jobUrl          String?
+  jobDescription  String?
+  salaryMin       Int?
+  salaryMax       Int?
+  currency        String?            @default("EUR")
+  vacationDays    Int?            @default(20)
+  location        String?
+  workMode        WorkMode          @default(UNKNOWN)
+  employmentType  EmploymentType    @default(FULL_TIME)
+  status          ApplicationStatus @default(SAVED)
+  appliedAt       DateTime?
+  deadline        DateTime?
+  nextAction      String?
+  nextActionDate  DateTime?
+  interviews      Interview[]
+  notes           Note[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([companyId])
+  @@index([status])
+  @@index([appliedAt])
+
+  @@map("applications")
+}
+
+model Interview {
+  id            String        @id @default(cuid())
+  applicationId String
+  application   Application   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  scheduledAt   DateTime
+  type          InterviewType
+  location      String?
+  notes         String?
+  result        String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([applicationId])
+  @@index([scheduledAt])
+
+  @@map("interviews")
+}
+
+model Note {
+  id            String      @id @default(cuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  content       String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([applicationId])
+
+  @@map("notes")
+}
