@@ -4,13 +4,10 @@ import { isValidUrl, normalizeUrl } from "@/lib/url";
 
 export const applicationStatuses = [
   "NOT_APPLIED",
-  "SAVED",
   "APPLIED",
-  "SCREENING",
   "INTERVIEW",
   "OFFER",
   "REJECTED",
-  "WITHDRAWN",
   "GHOSTED",
   "CLOSED",
 ] as const;
@@ -31,13 +28,10 @@ export type EmploymentTypeValue = (typeof employmentTypes)[number];
 
 export const applicationStatusLabels: Record<ApplicationStatusValue, string> = {
   NOT_APPLIED: "Not Applied",
-  SAVED: "Saved",
   APPLIED: "Applied",
-  SCREENING: "Screening",
   INTERVIEW: "Interview",
   OFFER: "Offer",
   REJECTED: "Rejected",
-  WITHDRAWN: "Withdrawn",
   GHOSTED: "Ghosted",
   CLOSED: "Closed",
 };

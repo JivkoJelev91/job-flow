@@ -195,7 +195,7 @@ async function main() {
       location: "Berlin",
       workMode: "HYBRID",
       employmentType: "FULL_TIME",
-      status: "SCREENING",
+      status: "INTERVIEW",
       appliedAt: day(-24),
       nextAction: "Prepare technical round material",
       nextActionDate: day(1),
@@ -329,7 +329,7 @@ async function main() {
       location: "Remote",
       workMode: "REMOTE",
       employmentType: "FULL_TIME",
-      status: "SAVED",
+      status: "NOT_APPLIED",
       deadline: day(13),
       nextAction: "Research the team and draft application",
       nextActionDate: day(7),
@@ -392,7 +392,7 @@ async function main() {
       location: "Remote",
       workMode: "HYBRID",
       employmentType: "CONTRACT",
-      status: "WITHDRAWN",
+      status: "CLOSED",
       appliedAt: day(-45),
       notes: {
         create: [

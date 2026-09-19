@@ -8,13 +8,10 @@ datasource db {
 
 enum ApplicationStatus {
   NOT_APPLIED
-  SAVED
   APPLIED
-  SCREENING
   INTERVIEW
   OFFER
   REJECTED
-  WITHDRAWN
   GHOSTED
   CLOSED
 
@@ -79,7 +76,7 @@ model Application {
   location        String?
   workMode        WorkMode          @default(UNKNOWN)
   employmentType  EmploymentType    @default(FULL_TIME)
-  status          ApplicationStatus @default(SAVED)
+  status          ApplicationStatus @default(NOT_APPLIED)
   appliedAt       DateTime?
   deadline        DateTime?
   nextAction      String?

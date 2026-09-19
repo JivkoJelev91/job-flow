@@ -62,9 +62,7 @@ export async function getDashboardInsights(
     },
   });
 
-  const submitted = applications.filter(
-    (a) => a.status !== "SAVED" && a.status !== "NOT_APPLIED",
-  );
+  const submitted = applications.filter((a) => a.status !== "NOT_APPLIED");
   const withInterview = submitted.filter((a) => a.interviews.length > 0);
   const withOffer = submitted.filter((a) => a.status === "OFFER");
 
@@ -140,7 +138,7 @@ export async function getDashboardInsights(
         )
       : null;
 
-  const closedStatuses = ["SAVED", "REJECTED", "WITHDRAWN", "GHOSTED"];
+  const closedStatuses = ["REJECTED", "GHOSTED"];
   const activePipeline = applications.filter(
     (a) => !closedStatuses.includes(a.status),
   ).length;

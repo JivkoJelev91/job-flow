@@ -247,7 +247,6 @@ const APPROACHING_INTERVIEW_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
 
 const attentionExcludedStatuses: ApplicationStatus[] = [
   "REJECTED",
-  "WITHDRAWN",
   "GHOSTED",
 ];
 
