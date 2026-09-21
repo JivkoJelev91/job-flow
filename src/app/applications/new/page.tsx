@@ -3,6 +3,7 @@ import { Briefcase } from "lucide-react";
 
 import { getCompanies } from "@/lib/data/companies";
 import { ApplicationForm } from "@/components/applications/application-form";
+import { toDateInput } from "@/lib/validation/application-schema";
 
 export const metadata: Metadata = {
   title: "New Application",
@@ -12,6 +13,7 @@ export const instant = false;
 
 export default async function NewApplicationPage() {
   const companies = await getCompanies();
+  const today = toDateInput(new Date());
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 py-8">
@@ -27,7 +29,7 @@ export default async function NewApplicationPage() {
           </p>
         </div>
       </div>
-      <ApplicationForm companies={companies} />
+      <ApplicationForm companies={companies} defaultAppliedAt={today} />
     </div>
   );
 }

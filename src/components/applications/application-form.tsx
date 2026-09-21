@@ -39,7 +39,6 @@ import {
   currencySuggestions,
   employmentTypeLabels,
   employmentTypes,
-  toDateInput,
   workModeLabels,
   workModes,
   type ApplicationFormInput,
@@ -117,10 +116,12 @@ export function ApplicationForm({
   companies,
   applicationId,
   initialValues,
+  defaultAppliedAt = "",
 }: {
   companies: { id: string; name: string }[];
   applicationId?: string;
   initialValues?: ApplicationFormValues;
+  defaultAppliedAt?: string;
 }) {
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
@@ -147,7 +148,7 @@ export function ApplicationForm({
       workMode: "UNKNOWN",
       employmentType: "FULL_TIME",
       status: "NOT_APPLIED",
-      appliedAt: toDateInput(new Date()),
+      appliedAt: defaultAppliedAt,
       nextAction: "",
       nextActionDate: "",
       notes: "",
