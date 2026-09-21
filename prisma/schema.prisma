@@ -49,6 +49,14 @@ enum InterviewType {
   @@map("interview_type")
 }
 
+enum TaskCategory {
+  CODING
+  LEARNING
+  NON_CODING
+
+  @@map("task_category")
+}
+
 model Company {
   id           String        @id @default(cuid())
   name         String
@@ -125,11 +133,15 @@ model Note {
 }
 
 model Task {
-  id        String   @id @default(cuid())
+  id        String       @id @default(cuid())
   title     String
-  completed Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  category  TaskCategory @default(NON_CODING)
+  completed Boolean      @default(false)
+  sortOrder Int          @default(0)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([category, sortOrder])
 
   @@map("tasks")
 }

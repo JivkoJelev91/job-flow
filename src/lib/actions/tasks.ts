@@ -3,7 +3,11 @@
 import { revalidatePath } from "next/cache";
 
 import { db } from "@/lib/db";
-import { taskFormSchema } from "@/lib/validation/task-schema";
+import {
+  taskCategories,
+  taskFormSchema,
+  type TaskCategoryValue,
+} from "@/lib/validation/task-schema";
 
 export type TaskActionResult = { error: string };
 
@@ -18,7 +22,18 @@ export async function createTask(
   }
 
   try {
-    await db.task.create({ data: { title: parsed.data.title } });
+    const last = await db.task.findFirst({
+      where: { category: parsed.data.category },
+      orderBy: { sortOrder: "desc" },
+      select: { sortOrder: true },
+    });
+    await db.task.create({
+      data: {
+        title: parsed.data.title,
+        category: parsed.data.category,
+        sortOrder: (last?.sortOrder ?? 0) + 1,
+      },
+    });
   } catch {
     return { error: "Couldn't save the task. Please try again." };
   }
@@ -38,7 +53,10 @@ export async function updateTask(
   try {
     await db.task.update({
       where: { id },
-      data: { title: parsed.data.title },
+      data: {
+        title: parsed.data.title,
+        category: parsed.data.category,
+      },
     });
   } catch {
     return { error: "Couldn't save the task. Please try again." };
@@ -61,6 +79,31 @@ export async function deleteTask(id: string) {
     await db.task.delete({ where: { id } });
   } catch {
     // Already gone — nothing to undo.
+  }
+  revalidatePath(TASKS_PATH);
+}
+
+export async function reorderTasks(
+  updates: { id: string; category: TaskCategoryValue; sortOrder: number }[],
+) {
+  if (updates.length === 0) return;
+
+  const valid = updates.every((update) =>
+    taskCategories.includes(update.category),
+  );
+  if (!valid) return;
+
+  try {
+    await db.$transaction(
+      updates.map(({ id, category, sortOrder }) =>
+        db.task.update({
+          where: { id },
+          data: { category, sortOrder },
+        }),
+      ),
+    );
+  } catch {
+    // Reorder failed — the list refreshes from the server on the next render.
   }
   revalidatePath(TASKS_PATH);
 }
