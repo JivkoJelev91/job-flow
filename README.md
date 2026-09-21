@@ -6,11 +6,13 @@ Built entirely for personal usage and not intended for public deployment.
 
 ## Features
 
+- Left sidebar navigation: Applications, Insights, and Daily Tasks
 - Application dashboard with a table-based view, sorting, filtering, and search
 - Full application records: company, position, job URL, salary, location, work mode, employment type, status
 - Interviews and notes per application
 - "Needs attention" section for overdue next actions and upcoming interviews
-- Overview page with statistics: response/offer/ghost rates, applications per week, status and work-mode breakdown
+- Insights page with statistics: response/offer/ghost rates, applications per week, status and work-mode breakdown
+- Daily Tasks tracker for job-search to-dos — add, edit, complete, and delete
 
 ## Technologies
 
@@ -48,3 +50,11 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm run db:seed` | Load sample data |
 | `npm run db:studio` | Open Prisma Studio |
 | `npm run db:create` | Create the local database |
+| `npm run db:generate` | Regenerate the Prisma client |
+| `npm run db:backup` | Dump the database to `backups/` via `pg_dump` |
+
+## Backups
+
+`npm run db:backup` writes a timestamped `pg_dump` archive (`jobflow-YYYY-MM-DD_HHMMSS.dump`) to the `backups/` folder and removes archives older than 14 days. The folder is git-ignored.
+
+A Windows scheduled task named **JobFlow DB Backup** runs this command daily at 02:00 while you are logged in.

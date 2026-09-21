@@ -17,8 +17,25 @@ function day(offset: number): Date {
   return date;
 }
 
+const DEFAULT_TASKS = [
+  "Review and update your résumé",
+  "Follow up on pending applications",
+  "Research 3 new companies to apply to",
+  "Polish your LinkedIn profile",
+  "Prepare for upcoming interviews",
+];
+
 async function main() {
   const force = process.env.SEED_FORCE === "1";
+
+  // Tasks are safe to seed any time — only added when the table is empty so
+  // new databases get a few starter tasks.
+  if ((await db.task.count()) === 0) {
+    await db.task.createMany({
+      data: DEFAULT_TASKS.map((title) => ({ title })),
+    });
+    console.log(`Seeded ${DEFAULT_TASKS.length} default tasks.`);
+  }
 
   const [applications, companies] = await Promise.all([
     db.application.count(),
