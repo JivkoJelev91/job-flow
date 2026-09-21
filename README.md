@@ -57,4 +57,4 @@ Open [http://localhost:3000](http://localhost:3000).
 
 `npm run db:backup` writes a timestamped `pg_dump` archive (`jobflow-YYYY-MM-DD_HHMMSS.dump`) to the `backups/` folder and removes archives older than 14 days. The folder is git-ignored.
 
-A Windows scheduled task named **JobFlow DB Backup** runs this command daily at 02:00 while you are logged in.
+A Windows scheduled task named **JobFlow DB Backup** runs this command daily at 08:00 while you are logged in.
