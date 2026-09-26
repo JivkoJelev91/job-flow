@@ -10,8 +10,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ApplicationStatusBadge } from "@/components/applications/application-status-badge";
+import { ApplicationDialogButton } from "@/components/applications/application-dialog-button";
 import { DeleteButton } from "@/components/ui/delete-button";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { deleteApplication } from "@/lib/actions/applications";
 import { cn } from "cn";
 import { statusRowTint } from "@/lib/status-style";
@@ -207,13 +208,12 @@ export function ApplicationTable({
                 <span className="text-sm text-muted-foreground">
                   No applications yet.
                 </span>
-                <Button
-                  render={<Link href="/applications/new" />}
-                  variant="default"
-                  size="sm"
+                <ApplicationDialogButton
+                  kind="new"
+                  className={buttonVariants({ variant: "default", size: "sm" })}
                 >
                   Add your first application
-                </Button>
+                </ApplicationDialogButton>
               </div>
             </TableCell>
           </TableRow>
@@ -224,20 +224,22 @@ export function ApplicationTable({
               className={cn("group transition-colors", statusRowTint[application.status])}
             >
               <TableCell className="font-medium">
-                <Link
-                  href={`/applications/${application.id}`}
-                  className="text-primary underline-offset-4 hover:underline"
+                <ApplicationDialogButton
+                  kind="details"
+                  applicationId={application.id}
+                  className="text-start text-primary underline-offset-4 hover:underline"
                 >
                   {application.company.name}
-                </Link>
+                </ApplicationDialogButton>
               </TableCell>
               <TableCell>
-                <Link
-                  href={`/applications/${application.id}`}
-                  className="underline-offset-4 hover:underline"
+                <ApplicationDialogButton
+                  kind="details"
+                  applicationId={application.id}
+                  className="text-start underline-offset-4 hover:underline"
                 >
                   {application.position}
-                </Link>
+                </ApplicationDialogButton>
               </TableCell>
               <TableCell>
                 <ApplicationStatusBadge status={application.status} />
@@ -255,15 +257,13 @@ export function ApplicationTable({
               <TableCell>{formatDate(nextInterviewAt(application.interviews))}</TableCell>
               <TableCell>
                 <div className="flex items-center justify-end gap-1 opacity-60 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
-                  <Button
-                    render={
-                      <Link href={`/applications/${application.id}/edit`} />
-                    }
-                    variant="ghost"
-                    size="sm"
+                  <ApplicationDialogButton
+                    kind="edit"
+                    applicationId={application.id}
+                    className={buttonVariants({ variant: "ghost", size: "sm" })}
                   >
                     Edit
-                  </Button>
+                  </ApplicationDialogButton>
                   <DeleteButton
                       action={deleteApplication}
                       args={[application.id]}

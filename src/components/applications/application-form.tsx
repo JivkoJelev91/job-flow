@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -117,11 +116,15 @@ export function ApplicationForm({
   applicationId,
   initialValues,
   defaultAppliedAt = "",
+  onCancel,
+  onSaved,
 }: {
   companies: { id: string; name: string }[];
   applicationId?: string;
   initialValues?: ApplicationFormValues;
   defaultAppliedAt?: string;
+  onCancel: () => void;
+  onSaved: () => void;
 }) {
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
@@ -163,6 +166,8 @@ export function ApplicationForm({
         : await createApplication(values);
       if (result?.error) {
         setServerError(result.error);
+      } else {
+        onSaved();
       }
     });
   };
@@ -501,7 +506,7 @@ export function ApplicationForm({
       </Card>
 
       <div className="flex items-center justify-end gap-2">
-        <Button render={<Link href="/" />} variant="outline">
+        <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
         <Button type="submit" disabled={isPending}>

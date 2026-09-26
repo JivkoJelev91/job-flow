@@ -1,6 +1,8 @@
+"use client";
+
 import type { Prisma } from "@prisma/client";
 import Link from "next/link";
-import { ArrowLeft, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 
 import { ApplicationStatusBadge } from "@/components/applications/application-status-badge";
 import { DeleteButton } from "@/components/ui/delete-button";
@@ -60,46 +62,42 @@ function DetailGrid({ children }: { children: React.ReactNode }) {
 
 export function ApplicationDetails({
   application,
+  onEdit,
+  onChanged,
+  onNavigate,
 }: {
   application: ApplicationDetailsData;
+  onEdit: () => void;
+  onChanged: () => void;
+  onNavigate: () => void;
 }) {
+  const removeApplication = async () => {
+    await deleteApplication(application.id);
+    onChanged();
+  };
+
+  const removeInterview = async (id: string) => {
+    await deleteInterview(id);
+    onChanged();
+  };
+
+  const removeNote = async (id: string) => {
+    await deleteNote(id);
+    onChanged();
+  };
+
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {application.position}
-          </h1>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">
-              {application.company.name}
-            </span>
-            <ApplicationStatusBadge status={application.status} />
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button
-            render={<Link href="/" />}
-            variant="ghost"
-          >
-            <ArrowLeft data-icon="inline-start" />
-            Back
-          </Button>
-          <Button
-            render={
-              <Link href={`/applications/${application.id}/edit`} />
-            }
-            variant="default"
-          >
-            <Pencil data-icon="inline-start" />
-            Edit
-          </Button>
-          <DeleteButton
-            action={deleteApplication}
-            args={[application.id]}
-            confirmText="Delete this application? This cannot be undone."
-          />
-        </div>
+      <div className="flex items-center justify-end gap-2">
+        <Button onClick={onEdit}>
+          <Pencil data-icon="inline-start" />
+          Edit
+        </Button>
+        <DeleteButton
+          action={removeApplication}
+          args={[]}
+          confirmText="Delete this application? This cannot be undone."
+        />
       </div>
 
       <Card>
@@ -182,6 +180,7 @@ export function ApplicationDetails({
               render={
                 <Link href={`/applications/${application.id}/interviews/new`} />
               }
+              onClick={onNavigate}
               size="sm"
             >
               Add Interview
@@ -212,14 +211,15 @@ export function ApplicationDetails({
                             href={`/applications/${application.id}/interviews/${interview.id}/edit`}
                           />
                         }
+                        onClick={onNavigate}
                         variant="ghost"
                         size="sm"
                       >
                         Edit
                       </Button>
                       <DeleteButton
-                          action={deleteInterview}
-                          args={[interview.id, application.id]}
+                          action={removeInterview}
+                          args={[interview.id]}
                           confirmText="Delete this interview?"
                           variant="ghost"
                           size="sm"
@@ -254,6 +254,7 @@ export function ApplicationDetails({
               render={
                 <Link href={`/applications/${application.id}/notes/new`} />
               }
+              onClick={onNavigate}
               size="sm"
             >
               Add Note
@@ -282,18 +283,19 @@ export function ApplicationDetails({
                             href={`/applications/${application.id}/notes/${note.id}/edit`}
                           />
                         }
+                        onClick={onNavigate}
                         variant="ghost"
                         size="sm"
                       >
                         Edit
                       </Button>
                       <DeleteButton
-                          action={deleteNote}
-                          args={[note.id, application.id]}
-                          confirmText="Delete this note?"
-                          variant="ghost"
-                          size="sm"
-                        />
+                        action={removeNote}
+                        args={[note.id]}
+                        confirmText="Delete this note?"
+                        variant="ghost"
+                        size="sm"
+                      />
                     </div>
                   </div>
                 </li>

@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { cn } from "cn";
 
 import { ApplicationStatusBadge } from "@/components/applications/application-status-badge";
+import { ApplicationDialogButton } from "@/components/applications/application-dialog-button";
 import {
   Card,
   CardAction,
@@ -63,15 +63,16 @@ export function NeedsAttention({
                 >
                 <CardHeader>
                   <CardTitle>
-                    <Link
-                      href={`/applications/${item.id}`}
+                    <ApplicationDialogButton
+                      kind="details"
+                      applicationId={item.id}
                       className="underline-offset-4 hover:underline"
                     >
                       {item.position}
-                    </Link>
+                    </ApplicationDialogButton>
                     <span className="text-sm font-normal text-muted-foreground">
                       {" "}
-                      · {item.company.name}
+                      Ã‚Â· {item.company.name}
                     </span>
                   </CardTitle>
                   <CardAction>
@@ -100,7 +101,7 @@ export function NeedsAttention({
                             : "text-xs text-muted-foreground"
                         }
                       >
-                        {formatDate(item.nextActionDate)} · {dayLabel(item.nextActionDate)}
+                        {formatDate(item.nextActionDate)} Ã‚Â· {dayLabel(item.nextActionDate)}
                       </span>
                     </div>
                   )}

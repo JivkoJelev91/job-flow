@@ -7,6 +7,7 @@ import { Briefcase, ClipboardList, LayoutDashboard, Menu, PlusIcon, X } from "lu
 import { cn } from "cn";
 
 import { Button } from "@/components/ui/button";
+import { useApplicationDialogs } from "@/components/applications/application-dialogs";
 
 const navLinks = [
   { href: "/", label: "Applications", icon: Briefcase },
@@ -34,8 +35,10 @@ function Brand() {
 }
 
 function NewApplicationButton() {
+  const { open } = useApplicationDialogs();
+
   return (
-    <Button render={<Link href="/applications/new" />} className="w-full">
+    <Button type="button" onClick={() => open("new")} className="w-full">
       <PlusIcon data-icon="inline-start" />
       New Application
     </Button>

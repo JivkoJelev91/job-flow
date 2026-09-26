@@ -42,13 +42,12 @@ export async function createInterview(
     return { error: "Couldn't save the interview. Please try again." };
   }
 
-  revalidatePath(`/applications/${applicationId}`);
-  redirect(`/applications/${applicationId}`);
+  revalidatePath("/");
+  redirect("/");
 }
 
 export async function updateInterview(
   id: string,
-  applicationId: string,
   input: unknown,
 ): Promise<InterviewActionResult | void> {
   const parsed = interviewFormSchema.safeParse(input);
@@ -65,15 +64,15 @@ export async function updateInterview(
     return { error: "Couldn't save the interview. Please try again." };
   }
 
-  revalidatePath(`/applications/${applicationId}`);
-  redirect(`/applications/${applicationId}`);
+  revalidatePath("/");
+  redirect("/");
 }
 
-export async function deleteInterview(id: string, applicationId: string) {
+export async function deleteInterview(id: string) {
   try {
     await db.interview.delete({ where: { id } });
   } catch {
     // Already gone — nothing to undo.
   }
-  revalidatePath(`/applications/${applicationId}`);
+  revalidatePath("/");
 }

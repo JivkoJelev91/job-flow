@@ -68,7 +68,7 @@ export function InterviewForm({
     setServerError(null);
     startTransition(async () => {
       const result = interviewId
-        ? await updateInterview(interviewId, applicationId, values)
+        ? await updateInterview(interviewId, values)
         : await createInterview(applicationId, values);
       if (result?.error) setServerError(result.error);
     });
@@ -156,7 +156,7 @@ export function InterviewForm({
       </Card>
 
       <div className="flex items-center justify-end gap-2">
-        <Button render={<Link href={`/applications/${applicationId}`} />} variant="outline">
+        <Button render={<Link href="/" />} variant="outline">
           Cancel
         </Button>
         <Button type="submit" disabled={isPending}>

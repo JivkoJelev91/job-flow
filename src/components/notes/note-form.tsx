@@ -50,7 +50,7 @@ export function NoteForm({
     setServerError(null);
     startTransition(async () => {
       const result = noteId
-        ? await updateNote(noteId, applicationId, values)
+        ? await updateNote(noteId, values)
         : await createNote(applicationId, values);
       if (result?.error) setServerError(result.error);
     });
@@ -84,10 +84,7 @@ export function NoteForm({
       </Card>
 
       <div className="flex items-center justify-end gap-2">
-        <Button
-          render={<Link href={`/applications/${applicationId}`} />}
-          variant="outline"
-        >
+        <Button render={<Link href="/" />} variant="outline">
           Cancel
         </Button>
         <Button type="submit" disabled={isPending}>

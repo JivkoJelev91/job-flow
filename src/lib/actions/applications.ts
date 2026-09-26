@@ -1,9 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 import { db } from "@/lib/db";
+import { getApplicationById } from "@/lib/data/applications";
+import { getCompanies } from "@/lib/data/companies";
 import {
   applicationFormSchema,
   parseDateOnly,
@@ -66,7 +67,6 @@ export async function createApplication(
   }
 
   revalidatePath("/");
-  redirect("/");
 }
 
 export async function updateApplication(
@@ -95,8 +95,6 @@ export async function updateApplication(
   }
 
   revalidatePath("/");
-  revalidatePath(`/applications/${id}`);
-  redirect(`/applications/${id}`);
 }
 
 export async function deleteApplication(id: string) {
@@ -106,5 +104,19 @@ export async function deleteApplication(id: string) {
     // Row was already removed — nothing to undo.
   }
   revalidatePath("/");
-  redirect("/");
+}
+
+export async function fetchApplicationDialogData(id: string | null) {
+  const [application, companies] = await Promise.all([
+    id ? getApplicationById(id) : null,
+    getCompanies(),
+  ]);
+
+  return {
+    application,
+    companies: companies.map((company) => ({
+      id: company.id,
+      name: company.name,
+    })),
+  };
 }
