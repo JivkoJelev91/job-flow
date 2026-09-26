@@ -1,4 +1,4 @@
-import { BadgeCheck, Bookmark, Briefcase, CalendarDays, Ghost, Send, ThumbsDown } from "lucide-react";
+import { Archive, BadgeCheck, Bookmark, Briefcase, CalendarDays, Ghost, Send, ThumbsDown } from "lucide-react";
 import Link from "next/link";
 import { cn } from "cn";
 import type { ApplicationStatus } from "@prisma/client";
@@ -14,6 +14,7 @@ export type DashboardStatsData = {
   interviews: number;
   offers: number;
   rejected: number;
+  closed: number;
 };
 
 type StatDefinition = {
@@ -105,6 +106,17 @@ const cards: StatDefinition[] = [
     cardTint: "bg-gray-500/[0.05]",
     activeTint: "bg-gray-500/15",
   },
+  {
+    key: "closed",
+    label: "Closed",
+    href: "/?status=CLOSED",
+    status: "CLOSED",
+    icon: Archive,
+    chipClass: "bg-stone-100 text-stone-600 dark:bg-stone-500/15 dark:text-stone-400",
+    valueClass: "text-stone-600 dark:text-stone-400",
+    cardTint: "bg-stone-500/[0.05]",
+    activeTint: "bg-stone-500/15",
+  },
 ];
 
 export function DashboardStats({
@@ -115,7 +127,7 @@ export function DashboardStats({
   activeStatus?: ApplicationStatus | null;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
       {cards.map((card) => {
         const Icon = card.icon;
         const active = card.status

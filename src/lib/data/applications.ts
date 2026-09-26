@@ -248,6 +248,7 @@ const APPROACHING_INTERVIEW_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
 const attentionExcludedStatuses: ApplicationStatus[] = [
   "REJECTED",
   "GHOSTED",
+  "CLOSED",
 ];
 
 export type NeedsAttentionApplication = ApplicationWithInterviews & {
@@ -331,5 +332,6 @@ export async function getApplicationStats(query: ApplicationListQuery) {
     interviews: countFor("INTERVIEW"),
     offers: countFor("OFFER"),
     rejected: countFor("REJECTED"),
+    closed: countFor("CLOSED"),
   };
 }

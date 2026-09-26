@@ -115,7 +115,7 @@ export function DashboardInsights({ insights }: { insights: Insights }) {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <Card size="sm" className="bg-emerald-500/[0.05]">
           <CardHeader>
             <CardTitle className="text-sm text-muted-foreground">
@@ -144,6 +144,22 @@ export function DashboardInsights({ insights }: { insights: Insights }) {
             </span>
             <span className="text-xs text-muted-foreground">
               Submitted applications that never got a response
+            </span>
+          </CardContent>
+        </Card>
+
+        <Card size="sm" className="bg-stone-500/[0.05]">
+          <CardHeader>
+            <CardTitle className="text-sm text-muted-foreground">
+              Closed rate
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-1">
+            <span className="text-2xl font-semibold tabular-nums text-stone-600 dark:text-stone-400">
+              {percent(insights.closedRate)}
+            </span>
+            <span className="text-xs text-muted-foreground">
+              Submitted applications that expired without an outcome
             </span>
           </CardContent>
         </Card>

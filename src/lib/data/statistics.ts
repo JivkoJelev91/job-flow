@@ -33,6 +33,7 @@ export type DashboardInsights = {
   applicationsByWorkMode: { mode: WorkMode; count: number }[];
   interviewToOfferRate: number | null;
   ghostedRate: number | null;
+  closedRate: number | null;
   applicationsThisMonth: number;
   activePipeline: number;
   averagePerWeek: number;
@@ -62,7 +63,10 @@ export async function getDashboardInsights(
     },
   });
 
-  const submitted = applications.filter((a) => a.status !== "NOT_APPLIED");
+  const closed = applications.filter((a) => a.status === "CLOSED").length;
+  const submitted = applications.filter(
+    (a) => a.status !== "NOT_APPLIED" && a.status !== "CLOSED",
+  );
   const withInterview = submitted.filter((a) => a.interviews.length > 0);
   const withOffer = submitted.filter((a) => a.status === "OFFER");
 
@@ -138,9 +142,14 @@ export async function getDashboardInsights(
         )
       : null;
 
-  const closedStatuses = ["REJECTED", "GHOSTED"];
+  const closedRate =
+    closed + submitted.length > 0
+      ? Math.round((closed / (closed + submitted.length)) * 100)
+      : null;
+
+  const terminalStatuses = ["REJECTED", "GHOSTED", "CLOSED"];
   const activePipeline = applications.filter(
-    (a) => !closedStatuses.includes(a.status),
+    (a) => !terminalStatuses.includes(a.status),
   ).length;
 
   const now = new Date();
@@ -175,6 +184,7 @@ export async function getDashboardInsights(
     applicationsByWorkMode,
     interviewToOfferRate,
     ghostedRate,
+    closedRate,
     applicationsThisMonth,
     activePipeline,
     averagePerWeek,
